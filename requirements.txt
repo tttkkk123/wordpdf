@@ -1,0 +1,7 @@
+# 运行依赖（Windows 下推荐全部安装；非 Windows 可去掉 pywin32）
+python-docx>=1.1.0
+pymupdf>=1.24.0
+pdf2docx>=0.5.6
+pywin32>=306; sys_platform == "win32"
+# 可选：让 GUI 支持把文件直接拖进窗口
+tkinterdnd2>=0.4.0; python_version >= "3.9"

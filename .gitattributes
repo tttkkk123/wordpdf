@@ -1,0 +1,20 @@
+# 统一换行符，避免 Windows 批处理被规范化成 LF 后无法运行
+* text=auto
+
+# 批处理必须原样保留 CRLF：用 -text 完全禁用转换，
+# 这样 clone、raw 下载、zip 下载拿到的都是带 CRLF 的原文件
+*.bat  -text
+*.cmd  -text
+*.bas  text eol=crlf
+
+*.py   text eol=lf
+*.pyw  text eol=lf
+*.md   text eol=lf
+*.toml text eol=lf
+*.txt  text eol=lf
+
+*.png  binary
+*.jpg  binary
+*.pdf  binary
+*.xlsx binary
+*.docx binary

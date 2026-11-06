@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wordpdf"
+version = "1.0.1"
+description = "Word 与 PDF 双向转换插件：混合引擎 + 自动降级"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "python-docx>=1.1.0",
+    "pymupdf>=1.24.0",
+    "pdf2docx>=0.5.6",
+    "pywin32>=306; sys_platform == 'win32'",
+]
+
+[project.optional-dependencies]
+dragdrop = ["tkinterdnd2>=0.4.0"]
+
+[project.scripts]
+wordpdf = "wordpdf.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["wordpdf*"]
