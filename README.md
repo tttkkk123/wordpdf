@@ -93,8 +93,8 @@ pul/
 ├─ 启动转换器.bat            双击启动 GUI（首次自动建环境）
 ├─ run_gui.pyw               无控制台启动脚本（带异常捕获）
 ├─ requirements.txt / pyproject.toml
-├─ docs/screenshot.png       界面截图
-├─ .gitignore / LICENSE
+├─ docs/                     界面截图 + 发布说明
+├─ .gitignore / .gitattributes / LICENSE
 ```
 
 ---
@@ -232,58 +232,4 @@ pyinstaller -w -n WordPdfTool --add-data "wordpdf;wordpdf" --hidden-import pytho
 
 ---
 
-## 十、发布到 GitHub
-
-### 只传 `启动转换器.bat` 能跑吗？
-
-**不能。** 那个 bat 只负责"找 Python → 建虚拟环境 → 装依赖 → 启动界面"，
-真正的转换逻辑在 `wordpdf/` 包里，bat 里一行 Python 都没有。
-只传 bat 的话，别人双击后会在 `pip install` 那步失败，因为找不到 `requirements.txt` 和源码。
-
-### 应该提交的（大约 20 个文件，不到 200 KB）
-
-```
-wordpdf/                  整个包：core/ 引擎与编排、gui.py、cli.py、addin/*.bas
-run_gui.pyw               启动器
-启动转换器.bat              一键启动脚本
-requirements.txt          依赖清单
-pyproject.toml            可 pip install -e . / 命令行入口
-README.md  LICENSE  .gitignore
-docs/screenshot.png       README 里引用的截图
-tests/                    selftest.py、gui_smoke.py（可选，但建议留，别人能自检）
-```
-
-### 千万不要提交的
-
-| 排除项 | 原因 |
-|--------|------|
-| `.venv/` | 虚拟环境有绝对路径 + 上百 MB 二进制，且平台绑定，必须由使用者本地生成 |
-| `__pycache__/` `*.pyc` | 编译缓存，无用 |
-| `logs/`、`tests/_out/` | 运行产物、测试中间文件 |
-| `*.egg-info/` `build/` `dist/` | 打包中间产物 |
-| 你自己的 `.env`、个人绝对路径 | 泄露信息 |
-
-`.gitignore` 里已经排好了，`git add .` 不会误传。
-
-### 提交并推送
-
-```bash
-git init
-git add .
-git status --short          # 先确认一遍清单，不该出现的文件在这里能看见
-git commit -m "feat: Word ⇄ PDF 双向转换插件（混合引擎 + 自动降级）"
-git branch -M main
-git remote add origin https://github.com/<你的账号>/wordpdf.git
-git push -u origin main
-```
-
-### 发布前的三个自查
-
-1. `LICENSE` 里的 `Copyright (c) 2026 wordpdf contributors` 改成你的名字或 GitHub 昵称（用 MIT 就够，想更严格可换 Apache-2.0）。
-2. `wordpdf/addin/WordPdfAddin.bas` 顶部两行是占位路径 `C:\path\to\wordpdf`，**不要**把自己的本机路径提交上去。
-3. 用干净目录验证一遍：`git clone` 到别处 → 双击 `启动转换器.bat`，能自动建环境并弹出界面才算发布合格
-   （首次会跑 `pip install`，1–3 分钟属正常）。
-
-> 建议给仓库加 topics：`word-to-pdf` `pdf-to-word` `docx` `pdf` `python` `tkinter`，
-> 并在 About 里写明「Windows only，基于 Word COM + pdf2docx」。
-
+> 想把这个项目 fork 后重新发布？换行符、编码、需要排除哪些文件等注意事项见 [docs/PUBLISHING.md](docs/PUBLISHING.md)。
